@@ -1,0 +1,33 @@
+.global fibonacci
+
+
+fibonacci:
+
+    addi $sp $sp -8 # allocate stack for 2 items
+    sw $ra 4($sp) # return address
+    sw $a0 0($sp) # value of n
+    slti $t0 $a0 2 # test for n < 2
+    beq $t0 $zero split # if n !< 2, go to call
+    add $v0 $a0 $zero # return n
+    addi $sp $sp 8 # pop 2 items off stack
+    jr $ra
+
+split:
+    addi $a0 $a0 -1 # put value of n-1 into $a0
+    jal fibonacci
+    lw $a0 0($sp) # restore argument n
+    lw $ra 4($sp) # restore return address
+    addi $sp $sp 8
+    add $v1 $v0 $zero # put value of the result in $v1
+    
+    addi $a0 $a0 -2 # put value of n-2 into $a0
+    jal fibonacci
+    lw $a0 0($sp) # restore argument n
+    lw $ra 4($sp) # restore return address
+    add $v0 $v1 $v0 # return fib(n-1) + fib(n-2)
+    jr $ra
+    
+    
+    
+
+
